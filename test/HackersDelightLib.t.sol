@@ -40,20 +40,20 @@ contract HackersDelightTests is Test {
         assertEq(actual, expected, "Wrong ceiling average");  
     }
 
-    function test_SignedRightShift(uint256 x, uint256 n) public {
-        vm.assume(n < 255);
-        int256 expected = int256(x >> n);
-        int256 actual = HackersDelight.signedRightShift(int256(x), n);
-        assertEq(actual, expected, "Wrong signed right shift");
+    function test_Sign_NegativeInt256(int256 x) public {
+        vm.assume(x < 0);
+        int256 actual = HackersDelight.sign(x);
+        assertEq(actual, -1, "Wrong sign");
     }
 
-    function test_SignedRightShift_NoLib() public {
+    function test_Sign_Zero() public {
+        int256 actual = HackersDelight.sign(0);
+        assertEq(actual, 0, "Wrong sign");
+    }
 
-        // X = 8
-        uint256 x = 0x100;
-
-        int256 y = -1;
-
-        console.log("yBytes: %s", y);
+    function test_Sign_PositiveInt256(int256 x) public {
+        vm.assume(x > 0);
+        int256 actual = HackersDelight.sign(x);
+        assertEq(actual, 1, "Wrong sign");
     }
 }

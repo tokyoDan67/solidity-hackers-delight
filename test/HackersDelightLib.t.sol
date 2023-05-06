@@ -40,7 +40,7 @@ contract HackersDelightTests is Test {
         assertEq(actual, expected, "Wrong ceiling average");  
     }
 
-    function test_Sign_NegativeInt256(int256 x) public {
+    function testFuzz_Sign_NegativeInt256(int256 x) public {
         vm.assume(x < 0);
         int256 actual = HackersDelight.sign(x);
         assertEq(actual, -1, "Wrong sign");
@@ -51,9 +51,43 @@ contract HackersDelightTests is Test {
         assertEq(actual, 0, "Wrong sign");
     }
 
-    function test_Sign_PositiveInt256(int256 x) public {
+    function testFuzz_Sign_PositiveInt256(int256 x) public {
         vm.assume(x > 0);
         int256 actual = HackersDelight.sign(x);
         assertEq(actual, 1, "Wrong sign");
+    }
+
+    function testFuzz_ThreeValuedCompare_Int256_LessThan(int256 x, int256 y) public {
+        vm.assume(x < y);
+        int256 actual = HackersDelight.threeValuedCompare(x, y);
+        assertEq(actual, -1, "Wrong result");
+    }
+
+    function testFuzz_ThreeValuedCompare_Int256_Equal(int256 x) public {
+        int256 actual = HackersDelight.threeValuedCompare(x, x);
+        assertEq(actual, 0, "Wrong result");
+    }
+
+    function testFuzz_ThreeValuedCompare_Int256_GreaterThan(int256 x, int256 y) public {
+        vm.assume(x > y);
+        int256 actual = HackersDelight.threeValuedCompare(x, y);
+        assertEq(actual, 1, "Wrong result");
+    }
+
+    function testFuzz_ThreeValuedCompare_Uint256_LessThan(uint256 x, uint256 y) public {
+        vm.assume(x < y);
+        int256 actual = HackersDelight.threeValuedCompare(x, y);
+        assertEq(actual, -1, "Wrong result");
+    }
+
+    function testFuzz_ThreeValuedCompare_Uint256_Equal(uint256 x) public {
+        int256 actual = HackersDelight.threeValuedCompare(x, x);
+        assertEq(actual, 0, "Wrong result");
+    }
+
+    function testFuzz_ThreeValuedCompare_Uint256_GreaterThan(uint256 x, uint256 y) public {
+        vm.assume(x > y);
+        int256 actual = HackersDelight.threeValuedCompare(x, y);
+        assertEq(actual, 1, "Wrong result");
     }
 }
